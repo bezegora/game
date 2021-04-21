@@ -87,10 +87,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tile.png" />
+    <None Include="Resources\player.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\player.png" />
+    <None Include="Resources\tile.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\wall.png" />
