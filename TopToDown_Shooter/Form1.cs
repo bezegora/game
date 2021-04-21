@@ -27,8 +27,8 @@ namespace TopToDown_Shooter
             };
             Paint += new PaintEventHandler(OnPaint);
             var stringMap = new[]{
-                 "P #",
                  "  #",
+                 " P#",
                  "###"
             };
 

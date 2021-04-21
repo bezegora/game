@@ -90,10 +90,10 @@
     <None Include="Resources\player.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tile.png" />
+    <None Include="Resources\wall.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\wall.png" />
+    <None Include="Resources\tile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
