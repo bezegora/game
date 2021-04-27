@@ -20,6 +20,10 @@ namespace TopToDown_Shooter
         public Window()
         {
             InitializeComponent();
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | 
+                ControlStyles.AllPaintingInWmPaint | 
+                ControlStyles.UserPaint, true);
+            UpdateStyles();
             var timer = new Timer() { Interval = 100 };
             timer.Tick += (sender, e) =>
             {
