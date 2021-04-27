@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TopToDown_Shooter
 {
-    enum Creature
+    public enum Creature
     {
         Player,
         Enemy,

@@ -9,17 +9,17 @@ using System.Windows.Forms;
 namespace TopToDown_Shooter
 {
 
-    class Tile
+    public class Tile
     {
         Size size = new Size(64, 64);
 
-        Creature Creature { get; set; }
+        public Creature Creature { get; set; }
 
-        Point Location { get; set; }
+        public Point Location { get; set; }
 
         public void Paint(PaintEventArgs e)
         {
-            if(Creature is Creature.Wall) e.Graphics.DrawImage(new Bitmap(Properties.Resources.wall, size), Location);
+            if (Creature is Creature.Wall) e.Graphics.DrawImage(new Bitmap(Properties.Resources.wall, size), Location);
             if (Creature is Creature.Player) e.Graphics.DrawImage(new Bitmap(Properties.Resources.player, size), Location);
             if (Creature is Creature.Empty) e.Graphics.DrawImage(new Bitmap(Properties.Resources.tile, size), Location);
         }

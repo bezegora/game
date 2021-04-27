@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace TopToDown_Shooter
 {
-    class Map
+    public class Map
     {
         public Tile[,] _Map { get; set; }
+        public int[] Player { get; set; }
 
         public Map(string[] stringMap)
         {
@@ -19,7 +20,7 @@ namespace TopToDown_Shooter
             for (var y = 0; y < width; y++)
                 for (var x = 0; x < height; x++)
                 {
-                    var c = stringMap[x][y];
+                    var c = stringMap[y][x];
                     switch (c)
                     {
                         case '#':
@@ -27,12 +28,15 @@ namespace TopToDown_Shooter
                             break;
                         case 'P':
                             _Map[x, y] = new Tile(Creature.Player, new Point(x, y)); // игрок
+                            Player = new int[2] { x, y };
                             break;
-                        case ' ':
+                        default:
                             _Map[x, y] = new Tile(Creature.Empty, new Point(x, y)); // пусто
                             break;
                     }
                 }
         }
+
+        public bool Contains(int x, int y) => x >= 0 && x < _Map.GetLength(0) && y >= 0 && y < _Map.GetLength(1);
     }
 }
