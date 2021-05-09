@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace TopToDown_Shooter
@@ -11,20 +6,16 @@ namespace TopToDown_Shooter
 
     public class Tile
     {
-        Size size = new Size(64, 64);
+        static Size size = new Size(64, 64);
 
-        public Creature Creature { get; set; }
+        public ICreature Creature { get; set; }
 
         public Point Location { get; set; }
 
-        public void Paint(PaintEventArgs e)
-        {
-            if (Creature is Creature.Wall) e.Graphics.DrawImage(new Bitmap(Properties.Resources.wall, size), Location);
-            if (Creature is Creature.Player) e.Graphics.DrawImage(new Bitmap(Properties.Resources.player, size), Location);
-            if (Creature is Creature.Empty) e.Graphics.DrawImage(new Bitmap(Properties.Resources.tile, size), Location);
-        }
+        public void Paint(PaintEventArgs e) => Creature.Paint(e, Location); 
+        /*e.Graphics.DrawImage(new Bitmap(Properties.Resources.tile, size), Location)*/
 
-        public Tile(Creature creature, Point location)
+        public Tile(ICreature creature, Point location)
         {
             Location = new Point(location.X * size.Width, location.Y * size.Height);
             Creature = creature;

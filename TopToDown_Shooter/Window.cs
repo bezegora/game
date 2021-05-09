@@ -20,8 +20,8 @@ namespace TopToDown_Shooter
         public Window()
         {
             InitializeComponent();
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | 
-                ControlStyles.AllPaintingInWmPaint | 
+            SetStyle(ControlStyles.OptimizedDoubleBuffer |
+                ControlStyles.AllPaintingInWmPaint |
                 ControlStyles.UserPaint, true);
             UpdateStyles();
             var timer = new Timer() { Interval = 100 };
@@ -34,41 +34,44 @@ namespace TopToDown_Shooter
                  "     #",
                  " P   #",
                  "##   #",
-                 "      ",
+                 " MB   ",
                  "      ",
                  "      "
             };
             KeyDown += new KeyEventHandler(DoTurn);
             Level = new Map(stringMap);
-            Player = new Player { X = Level.Player[0], Y = Level.Player[1] };
+            Player = new Player { X = Level.Player.X, Y = Level.Player.Y };
         }
 
         private void DoTurn(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode.ToString())
+            switch (e.KeyCode)
             {
-                case "A":
-                    MovePlayer(new[] { -1, 0 });
+                case Keys.A:
+                    MovePlayer(Direction.Left);
                     break;
-                case "D":
-                    MovePlayer(new[] { 1, 0 });
+                case Keys.D:
+                    MovePlayer(Direction.Right);
                     break;
-                case "S":
-                    MovePlayer(new[] { 0, 1 });
+                case Keys.S:
+                    MovePlayer(Direction.Down);
                     break;
-                case "W":
-                    MovePlayer(new[] { 0, -1 });
+                case Keys.W:
+                    MovePlayer(Direction.Up);
                     break;
             }
         }
 
-        private void MovePlayer(int[] xy)
+        private void MovePlayer(Direction dir)
         {
-            if (Level.Contains(Player.X + xy[0], Player.Y + xy[1]) && Level._Map[Player.X + xy[0], Player.Y + xy[1]].Creature is Creature.Empty)
+            var x = dir is Direction.Right ? 1 : dir is Direction.Left ? -1 : 0;
+            var y = dir is Direction.Down ? 1 : dir is Direction.Up ? -1 : 0;
+
+            if (Level.Contains(Player.X + x, Player.Y + y) && Level._Map[Player.X + x, Player.Y + y].Creature is Wall)
             {
-                Level._Map[Player.X, Player.Y] = new Tile(Creature.Empty, Location = new Point(Player.X, Player.X));
-                Level._Map[Player.X + xy[0], Player.Y + xy[1]] = new Tile(Creature.Player, Location = new Point(Player.X + xy[0], Player.Y + xy[1]));
-                Player = new Player { X = Player.X + xy[0], Y = Player.Y + xy[1] };
+                Level._Map[Player.X, Player.Y] = new Tile(new Empty(), Location = new Point(Player.X, Player.Y));
+                Level._Map[Player.X + x, Player.Y + y] = new Tile(Player, Location = new Point(Player.X + x, Player.Y + y));
+                Player = new Player { X = Player.X + x, Y = Player.Y + y };
                 Invalidate();
             }
         }
