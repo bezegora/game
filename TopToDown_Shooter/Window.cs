@@ -12,7 +12,7 @@ namespace TopToDown_Shooter
 {
     public partial class Window : Form
     {
-        readonly Map Level;
+        public readonly Map Level;
 
         Player Player;
         //List<Enemy>
@@ -59,6 +59,32 @@ namespace TopToDown_Shooter
                 case Keys.W:
                     MovePlayer(Direction.Up);
                     break;
+                case Keys.Up:
+                    ShootBullet(Direction.Up);
+                    break;
+                case Keys.Down:
+                    ShootBullet(Direction.Down);
+                    break;
+                case Keys.Right:
+                    ShootBullet(Direction.Right);
+                    break;
+                case Keys.Left:
+                    ShootBullet(Direction.Left);
+                    break;
+            }
+            //MoveEnemies();
+            Bullet.Move();
+        }
+
+        private void ShootBullet(Direction dir)
+        {
+            var x = dir is Direction.Right ? 1 : dir is Direction.Left ? -1 : 0;
+            var y = dir is Direction.Down ? 1 : dir is Direction.Up ? -1 : 0;
+            var bul = new Bullet(dir, Player.X + x, Player.Y + y);
+            if (Level.Contains(bul.X, bul.Y) && !(Level._Map[bul.X, bul.Y].Creature is Wall))
+            {
+                Level._Map[bul.X, bul.Y] = new Tile(bul, new Point(bul.X, bul.Y));
+                Invalidate();
             }
         }
 
@@ -67,7 +93,7 @@ namespace TopToDown_Shooter
             var x = dir is Direction.Right ? 1 : dir is Direction.Left ? -1 : 0;
             var y = dir is Direction.Down ? 1 : dir is Direction.Up ? -1 : 0;
 
-            if (Level.Contains(Player.X + x, Player.Y + y) && Level._Map[Player.X + x, Player.Y + y].Creature is Wall)
+            if (Level.Contains(Player.X + x, Player.Y + y) && !(Level._Map[Player.X + x, Player.Y + y].Creature is Wall))
             {
                 Level._Map[Player.X, Player.Y] = new Tile(new Empty(), Location = new Point(Player.X, Player.Y));
                 Level._Map[Player.X + x, Player.Y + y] = new Tile(Player, Location = new Point(Player.X + x, Player.Y + y));
