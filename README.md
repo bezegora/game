@@ -36,4 +36,4 @@
 **Сложность повышается разными уровнями и повышением частоты появления врагов**
 
 
-![alt text](https://github.com/bezegora/game/blob/6c99e089b73a93a2c4a203a1d3db2666da0f7f4c/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202021-05-12%20150404.png)
+![alt text](https://github.com/bezegora/game/blob/6c99e089b73a93a2c4a203a1d3db2666da0f7f4c/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202021-05-12%20150404.png "Что пока удалось реализовать")
