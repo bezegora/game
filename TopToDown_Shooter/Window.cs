@@ -15,7 +15,7 @@ namespace TopToDown_Shooter
         public readonly Map Level;
 
         Player Player;
-        //List<Enemy>
+        public static List<Enemy> Enemies = new List<Enemy> { new Enemy() { X = 0, Y = 0 } };
 
         public Window()
         {
@@ -25,10 +25,7 @@ namespace TopToDown_Shooter
                 ControlStyles.UserPaint, true);
             UpdateStyles();
             var timer = new Timer() { Interval = 100 };
-            timer.Tick += (sender, e) =>
-            {
-                Invalidate();
-            };
+            timer.Tick += (sender, e) => Invalidate();
             Paint += new PaintEventHandler(OnPaint);
             var stringMap = new[]{
                  "     #",
@@ -72,8 +69,12 @@ namespace TopToDown_Shooter
                     ShootBullet(Direction.Left);
                     break;
             }
-            //MoveEnemies();
-            Bullet.Move();
+            foreach (var enemy in Enemies)
+            {
+                enemy.Move(Player, Level);
+                Invalidate();
+            }
+            //Bullet.Move();
         }
 
         private void ShootBullet(Direction dir)
@@ -93,7 +94,7 @@ namespace TopToDown_Shooter
             var x = dir is Direction.Right ? 1 : dir is Direction.Left ? -1 : 0;
             var y = dir is Direction.Down ? 1 : dir is Direction.Up ? -1 : 0;
 
-            if (Level.Contains(Player.X + x, Player.Y + y) && !(Level._Map[Player.X + x, Player.Y + y].Creature is Wall))
+            if (Level.Contains(Player.X + x, Player.Y + y) && (Level._Map[Player.X + x, Player.Y + y].Creature is Empty))
             {
                 Level._Map[Player.X, Player.Y] = new Tile(new Empty(), Location = new Point(Player.X, Player.Y));
                 Level._Map[Player.X + x, Player.Y + y] = new Tile(Player, Location = new Point(Player.X + x, Player.Y + y));
@@ -102,10 +103,7 @@ namespace TopToDown_Shooter
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Invalidate();
-        }
+        private void Form1_Load(object sender, EventArgs e) => Invalidate();
 
         private void OnPaint(object sender, PaintEventArgs e)
         {

@@ -17,7 +17,7 @@ namespace TopToDown_Shooter
             Direction = dir;
             X = x;
             Y = y;
-            AllBullets.Add(this);
+            //AllBullets.Add(this);
         }
 
         public void Paint(PaintEventArgs e, Point location)

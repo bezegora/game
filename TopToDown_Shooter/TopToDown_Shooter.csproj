@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bullet.cs" />
+    <Compile Include="SinglyLinkedList.cs" />
+    <Compile Include="Walker.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="Enemy.cs" />
