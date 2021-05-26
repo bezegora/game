@@ -15,7 +15,7 @@ namespace TopToDown_Shooter
         public readonly Map Level;
 
         Player Player;
-        public static List<Enemy> Enemies = new List<Enemy> { new Enemy() { X = 0, Y = 0 } };
+        public static List<Enemy> Enemies = new List<Enemy> { };
 
         public Window()
         {
@@ -31,7 +31,7 @@ namespace TopToDown_Shooter
                  "     #",
                  " P   #",
                  "##   #",
-                 " MB   ",
+                 " M    ",
                  "      ",
                  "      "
             };
@@ -69,8 +69,10 @@ namespace TopToDown_Shooter
                     ShootBullet(Direction.Left);
                     break;
             }
-            foreach (var enemy in Enemies)
+            var i = Enemies.Count - 1;
+            while (Enemies.Count > 0 && i >= 0)
             {
+                var enemy = Enemies[i--];
                 enemy.Move(Player, Level);
                 Invalidate();
             }

@@ -26,7 +26,7 @@ namespace TopToDown_Shooter
                             _Map[x, y] = new Tile(Player, new Point(x, y)); // игрок
                             break;
                         case 'M':
-                            var enemy = new Tile(new Enemy(), new Point(x, y));
+                            var enemy = new Tile(new Enemy(x, y), new Point(x, y));
                             _Map[x, y] = enemy;
                             Window.Enemies.Add((Enemy)enemy.Creature);// монстр
                             break;
