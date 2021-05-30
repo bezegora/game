@@ -3,12 +3,11 @@ using System.Windows.Forms;
 
 namespace TopToDown_Shooter
 {
-    public class Player : ICreature
+    class Empty : IEntity
     {
         public int X { get; set; }
         public int Y { get; set; }
-
         public void Paint(PaintEventArgs e, Point location) 
-            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.player, new Size(64, 64)), location);
+            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.tile, new Size(64, 64)), location);
     }
 }

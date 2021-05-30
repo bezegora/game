@@ -8,14 +8,14 @@ namespace TopToDown_Shooter
     {
         static Size size = new Size(64, 64);
 
-        public ICreature Creature { get; set; }
+        public IEntity Creature { get; set; }
 
         public Point Location { get; set; }
 
         public void Paint(PaintEventArgs e) => Creature.Paint(e, Location); 
         /*e.Graphics.DrawImage(new Bitmap(Properties.Resources.tile, size), Location)*/
 
-        public Tile(ICreature creature, Point location)
+        public Tile(IEntity creature, Point location)
         {
             Location = new Point(location.X * size.Width, location.Y * size.Height);
             Creature = creature;

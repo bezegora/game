@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace TopToDown_Shooter
 {
-    class Wall : ICreature
+    class Wall : IEntity
     {
         public void Paint(PaintEventArgs e, Point location)
             => e.Graphics.DrawImage(new Bitmap(Properties.Resources.wall, new Size(64, 64)), location);

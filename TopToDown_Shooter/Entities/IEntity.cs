@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace TopToDown_Shooter
 {
-    public interface ICreature
+    public interface IEntity
     {
         void Paint(PaintEventArgs e, Point location);
         int X { get; set; }

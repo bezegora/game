@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace TopToDown_Shooter
 {
-    public class Enemy : ICreature
+    public class Enemy : IEntity
     {
         public void Paint(PaintEventArgs e, Point location)
-            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.monster, new Size(64, 64)), location);
+            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.player, new Size(64, 64)), location);
         public int X { get; set; }
         public int Y { get; set; }
 
@@ -24,19 +25,37 @@ namespace TopToDown_Shooter
             while (step.Length > 2)
                 step = step.Previous;
             var point = step.Value;
-            if (map._Map[point.X, point.Y].Creature is Bullet)
+            if (map.Tiles[point.X, point.Y].Creature is Spikes)
             {
-                map._Map[X, Y] = new Tile(new Empty(), new Point(X, Y));
-                map._Map[point.X, point.Y] = new Tile(new Empty(), new Point(point.X, point.Y));
+                map.Tiles[X, Y] = new Tile(new Empty(), new Point(X, Y));
+                map.Tiles[point.X, point.Y] = new Tile(new Empty(), new Point(point.X, point.Y));
                 Window.Enemies.Remove(this);
+                Window.Score++;
             }
             else
             {
-                map._Map[X, Y] = new Tile(new Empty(), new Point(X, Y));
-                map._Map[point.X, point.Y] = new Tile(this, new Point(point.X, point.Y));
+                map.Tiles[X, Y] = new Tile(new Empty(), new Point(X, Y));
+                map.Tiles[point.X, point.Y] = new Tile(this, new Point(point.X, point.Y));
                 X = point.X;
                 Y = point.Y;
             }
+            if (X == player.X && Y == player.Y)
+                Window.isGameOver = true;
+        }
+
+        public static void SpawnEnemy(Map map, Player player)
+        {
+            var rand = new Random();
+            var x = rand.Next(0, map.Tiles.GetLength(0));
+            var y = rand.Next(0, map.Tiles.GetLength(1));
+            while (Math.Abs(player.X - x) <= 2 && Math.Abs(player.Y - y) <= 2 || map.Tiles[x, y].Creature is Wall || map.Tiles[x, y].Creature is Spikes)
+            {
+                x = rand.Next(0, map.Tiles.GetLength(0));
+                y = rand.Next(0, map.Tiles.GetLength(1));
+            }
+            var enemy = new Enemy(x, y);
+            map.Tiles[x, y] = new Tile(enemy, new Point(x, y));
+            Window.Enemies.Add(enemy);
         }
 
         private static SinglyLinkedList<Point> FindNextStep(Map map, Point start, Point finish)
@@ -65,7 +84,7 @@ namespace TopToDown_Shooter
             {
                 var point = queue.Dequeue();
                 if (!level.Contains(point.X, point.Y)
-                  || level._Map[point.X, point.Y].Creature is Wall)
+                  || level.Tiles[point.X, point.Y].Creature is Wall)
                     continue;
                 foreach (var direction in Walker.PossibleDirections)
                 {
@@ -78,5 +97,6 @@ namespace TopToDown_Shooter
             }
             return routes;
         }
+
     }
 }

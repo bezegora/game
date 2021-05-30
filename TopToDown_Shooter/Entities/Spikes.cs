@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace TopToDown_Shooter
 {
-    public class Bullet : ICreature
+    public class Spikes : IEntity
     {
         public Direction Direction { get; private set; }
         public static int Velocity { get; } = 2;
-        public static List<Bullet> AllBullets { get; set; }
+        public static List<Spikes> AllBullets { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public Bullet(Direction dir, int x, int y)
+        public Spikes(Direction dir, int x, int y)
         {
             Direction = dir;
             X = x;
@@ -21,7 +20,7 @@ namespace TopToDown_Shooter
         }
 
         public void Paint(PaintEventArgs e, Point location)
-            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.bullet, new Size(64, 64)), location);
+            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.spikes, new Size(64, 64)), location);
 
         internal static void Move()
         {
