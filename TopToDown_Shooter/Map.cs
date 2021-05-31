@@ -31,7 +31,7 @@ namespace TopToDown_Shooter
                             Window.Enemies.Add((Enemy)enemy.Creature);// монстр
                             break;
                         case 'B':
-                            Tiles[x, y] = new Tile(new Spikes(Direction.Down, x, y), new Point(x, y)); //пуля
+                            Tiles[x, y] = new Tile(new Spikes(x, y), new Point(x, y)); //пуля
                             break;
                         default:
                             Tiles[x, y] = new Tile(new Empty() { X = x, Y = y }, new Point(x, y)); // пусто

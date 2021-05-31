@@ -57,6 +57,11 @@
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Tile.cs" />
     <Compile Include="Window.cs">
       <SubType>Form</SubType>
@@ -71,14 +76,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,25 +93,31 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\player.png" />
+    <None Include="Resources\spikes.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\wall.png" />
+    <None Include="Resources\paper.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\monster1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\player.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tile.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\bullet.png" />
+    <None Include="Resources\wall.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\monster.png" />
+    <None Include="Resources\monster2.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\spikes_withoutColor.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\spikes.png" />
+    <None Include="Resources\monster3.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

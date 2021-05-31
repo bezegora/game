@@ -9,14 +9,28 @@ namespace TopToDown_Shooter
     public class Enemy : IEntity
     {
         public void Paint(PaintEventArgs e, Point location)
-            => e.Graphics.DrawImage(new Bitmap(Properties.Resources.player, new Size(64, 64)), location);
+            => e.Graphics.DrawImage(new Bitmap(Image, new Size(64, 64)), location);
         public int X { get; set; }
         public int Y { get; set; }
+        private Image Image { get; set; }
 
         public Enemy(int x, int y)
         {
             X = x;
             Y = y;
+            var rand = new Random().Next(1, 4);
+            switch (rand)
+            {
+                case 1:
+                    Image = Properties.Resources.monster1;
+                    break;
+                case 2:
+                    Image = Properties.Resources.monster2;
+                    break;
+                case 3:
+                    Image = Properties.Resources.monster3;
+                    break;
+            }
         }
 
         internal void Move(Player player, Map map)
@@ -32,7 +46,7 @@ namespace TopToDown_Shooter
                 Window.Enemies.Remove(this);
                 Window.Score++;
             }
-            else
+            else if (!(map.Tiles[point.X, point.Y].Creature is Enemy))
             {
                 map.Tiles[X, Y] = new Tile(new Empty(), new Point(X, Y));
                 map.Tiles[point.X, point.Y] = new Tile(this, new Point(point.X, point.Y));

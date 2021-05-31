@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
+using static TopToDown_Shooter.Spikes;
+using static TopToDown_Shooter.Enemy;
+using static TopToDown_Shooter.Player;
 
 namespace TopToDown_Shooter
 {
@@ -15,8 +16,10 @@ namespace TopToDown_Shooter
         public static List<Enemy> Enemies = new List<Enemy>();
         public static int Score = 0;
         private static int CoolDown = 3;
-        private static int SpawnTime = 5;
+        private static int SpawnTime = 4;
         private static new int Height;
+        private static readonly List<Keys> ShootKeys = new List<Keys> { Keys.Up, Keys.Down, Keys.Right, Keys.Left };
+        private static readonly List<Keys> MoveKeys = new List<Keys> { Keys.A, Keys.W, Keys.S, Keys.D };
 
         public Window()
         {
@@ -25,8 +28,6 @@ namespace TopToDown_Shooter
                 ControlStyles.AllPaintingInWmPaint |
                 ControlStyles.UserPaint, true);
             UpdateStyles();
-            var timer = new Timer() { Interval = 100 };
-            timer.Tick += (sender, e) => Invalidate();
             Paint += new PaintEventHandler(OnPaint);
             var stringMap = new[]{
                  "                 # ",
@@ -49,92 +50,56 @@ namespace TopToDown_Shooter
 
         private void DoTurn(object sender, KeyEventArgs e)
         {
-            if (!isGameOver)
+            if (!isGameOver && ((ShootKeys.Contains(e.KeyCode) && CoolDown == 3) || MoveKeys.Contains(e.KeyCode)))
             {
                 switch (e.KeyCode)
                 {
                     case Keys.A:
-                        MovePlayer(Direction.Left);
+                        MovePlayer(Direction.Left, Level, Player);
                         break;
                     case Keys.D:
-                        MovePlayer(Direction.Right);
+                        MovePlayer(Direction.Right, Level, Player);
                         break;
                     case Keys.S:
-                        MovePlayer(Direction.Down);
+                        MovePlayer(Direction.Down, Level, Player);
                         break;
                     case Keys.W:
-                        MovePlayer(Direction.Up);
+                        MovePlayer(Direction.Up, Level, Player);
                         break;
                 }
                 if (CoolDown == 3)
-                {
                     switch (e.KeyCode)
                     {
                         case Keys.Up:
-                            PlaceSpikes(Direction.Up);
+                            PlaceSpikes(Direction.Up, Player, Level);
                             CoolDown = 0;
                             break;
                         case Keys.Down:
-                            PlaceSpikes(Direction.Down);
+                            PlaceSpikes(Direction.Down, Player, Level);
                             CoolDown = 0;
                             break;
                         case Keys.Right:
-                            PlaceSpikes(Direction.Right);
+                            PlaceSpikes(Direction.Right, Player, Level);
                             CoolDown = 0;
                             break;
                         case Keys.Left:
-                            PlaceSpikes(Direction.Left);
+                            PlaceSpikes(Direction.Left, Player, Level);
                             CoolDown = 0;
                             break;
                     }
-                }
                 if (CoolDown != 3)
                     CoolDown++;
+
                 var i = Enemies.Count - 1;
                 while (Enemies.Count > 0 && i >= 0)
-                {
-                    var enemy = Enemies[i--];
-                    enemy.Move(Player, Level);
-                    Invalidate();
-                }
+                    Enemies[i--].Move(Player, Level);
                 if (SpawnTime == 0)
                 {
-                    Enemy.SpawnEnemy(Level, Player);
-                    SpawnTime = 5;
-                    Invalidate();
+                    SpawnEnemy(Level, Player);
+                    SpawnTime = 4;
                 }
                 else SpawnTime--;
-            }
-        }
 
-        private void PlaceSpikes(Direction dir)
-        {
-            var x = dir is Direction.Right ? 1 : dir is Direction.Left ? -1 : 0;
-            var y = dir is Direction.Down ? 1 : dir is Direction.Up ? -1 : 0;
-            var bul = new Spikes(dir, Player.X + x, Player.Y + y);
-            if (Level.Contains(bul.X, bul.Y) && !(Level.Tiles[bul.X, bul.Y].Creature is Wall))
-            {
-                Level.Tiles[bul.X, bul.Y] = new Tile(bul, new Point(bul.X, bul.Y));
-                Invalidate();
-            }
-        }
-
-        private void MovePlayer(Direction dir)
-        {
-            var x = dir is Direction.Right ? 1 : dir is Direction.Left ? -1 : 0;
-            var y = dir is Direction.Down ? 1 : dir is Direction.Up ? -1 : 0;
-
-            if (Level.Contains(Player.X + x, Player.Y + y) && (Level.Tiles[Player.X + x, Player.Y + y].Creature is Empty))
-            {
-                Level.Tiles[Player.X, Player.Y] = new Tile(new Empty(), Location = new Point(Player.X, Player.Y));
-                Level.Tiles[Player.X + x, Player.Y + y] = new Tile(Player, Location = new Point(Player.X + x, Player.Y + y));
-                Player.X += x;
-                Player.Y += y;
-                Invalidate();
-            }
-            if (Enemies.Where(enemy => enemy.X == Player.X && enemy.Y == Player.Y).Any())
-            {
-                isGameOver = true;
                 Invalidate();
             }
         }
@@ -143,25 +108,48 @@ namespace TopToDown_Shooter
 
         private void OnPaint(object sender, PaintEventArgs e)
         {
-            // логика рисования (тупа что когда отрисовывается)
+            e.Graphics.DrawImage(Properties.Resources.paper, new PointF(0, 0));
             foreach (var tile in Level.Tiles)
                 tile.Paint(e);
             DrawLowerTab(e, Level);
             if (isGameOver)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Color.White), new Rectangle(0, 0, 320, 64));
-                e.Graphics.DrawString("GameOver", new Font(FontFamily.GenericMonospace, 48, FontStyle.Bold), new SolidBrush(Color.Red), -10, 0);
+                e.Graphics.FillRectangle(new SolidBrush(Color.White),
+                                         new Rectangle(0, 0, 320, 64));
+                e.Graphics.DrawString("GameOver",
+                                      new Font(FontFamily.GenericMonospace, 48, FontStyle.Bold),
+                                      new SolidBrush(Color.Red),
+                                      -10,
+                                      0);
             }
         }
 
         private static void DrawLowerTab(PaintEventArgs e, Map level)
         {
-            e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Black), 5), 0, Height, level.Tiles.GetLength(0)*64, Height);
-            e.Graphics.DrawString($"Score: {Score}", new Font(FontFamily.GenericMonospace, 24, FontStyle.Bold), new SolidBrush(Color.Black), 0, Height);
-            e.Graphics.DrawString("Spikes:", new Font(FontFamily.GenericMonospace, 24, FontStyle.Bold), new SolidBrush(Color.Black), 192, Height);
-            e.Graphics.FillRectangle(new SolidBrush(Color.Red), new Rectangle(352, Height, 60 * CoolDown, 38));
-            e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black), 5), new Rectangle(352, Height, 180, 38));
-            e.Graphics.DrawString($"Moves until next enemy appears {SpawnTime}", new Font(FontFamily.GenericMonospace, 24), new SolidBrush(SpawnTime <= 2 ? Color.Red : Color.Black), 352 + 180 + 32, Height);
+            e.Graphics.DrawLine(new Pen(new SolidBrush(Color.Black), 5),
+                                0,
+                                Height,
+                                level.Tiles.GetLength(0) * 64,
+                                Height);
+            e.Graphics.DrawString($"Score: {Score}",
+                                  new Font(FontFamily.GenericMonospace, 24, FontStyle.Bold),
+                                  new SolidBrush(Color.Black),
+                                  0,
+                                  Height);
+            e.Graphics.DrawString("Spikes:",
+                                  new Font(FontFamily.GenericMonospace, 24, FontStyle.Bold),
+                                  new SolidBrush(Color.Black),
+                                  192,
+                                  Height);
+            e.Graphics.FillRectangle(new SolidBrush(Color.Green),
+                                     new Rectangle(352, Height, 60 * CoolDown, 38));
+            e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Black), 5),
+                                     new Rectangle(352, Height, 180, 38));
+            e.Graphics.DrawString($"Moves until next enemy appears {SpawnTime}",
+                                  new Font(FontFamily.GenericMonospace, 24, SpawnTime <= 2 ? FontStyle.Bold : FontStyle.Regular),
+                                  new SolidBrush(SpawnTime <= 2 ? Color.Red : Color.Black),
+                                  352 + 180 + 32,
+                                  Height);
         }
     }
 }

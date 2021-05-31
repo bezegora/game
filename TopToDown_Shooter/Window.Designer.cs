@@ -1,5 +1,4 @@
-﻿
-namespace TopToDown_Shooter
+﻿namespace TopToDown_Shooter
 {
     partial class Window
     {
@@ -36,8 +35,8 @@ namespace TopToDown_Shooter
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Sketch Wars";
+            this.Text = "Sketch Wars";
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
 

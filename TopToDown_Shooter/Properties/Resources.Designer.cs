@@ -63,9 +63,9 @@ namespace TopToDown_Shooter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bullet {
+        internal static System.Drawing.Bitmap monster1 {
             get {
-                object obj = ResourceManager.GetObject("bullet", resourceCulture);
+                object obj = ResourceManager.GetObject("monster1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,29 @@ namespace TopToDown_Shooter.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap monster {
+        internal static System.Drawing.Bitmap monster2 {
             get {
-                object obj = ResourceManager.GetObject("monster", resourceCulture);
+                object obj = ResourceManager.GetObject("monster2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap monster3 {
+            get {
+                object obj = ResourceManager.GetObject("monster3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap paper {
+            get {
+                object obj = ResourceManager.GetObject("paper", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -96,16 +116,6 @@ namespace TopToDown_Shooter.Properties {
         internal static System.Drawing.Bitmap spikes {
             get {
                 object obj = ResourceManager.GetObject("spikes", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap spikes_withoutColor {
-            get {
-                object obj = ResourceManager.GetObject("spikes_withoutColor", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

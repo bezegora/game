@@ -13,7 +13,6 @@ namespace TopToDown_Shooter
         public Point Location { get; set; }
 
         public void Paint(PaintEventArgs e) => Creature.Paint(e, Location); 
-        /*e.Graphics.DrawImage(new Bitmap(Properties.Resources.tile, size), Location)*/
 
         public Tile(IEntity creature, Point location)
         {
