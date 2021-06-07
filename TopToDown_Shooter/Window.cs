@@ -14,10 +14,11 @@ namespace TopToDown_Shooter
         public static bool isGameOver;
         readonly Player Player;
         public static List<Enemy> Enemies = new List<Enemy>();
-        public static int Score = 0;
+        public static int Score;
         private static int CoolDown = 3;
         private static int SpawnTime = 4;
         private static new int Height;
+        public int HighScore = 0;
         private static readonly List<Keys> ShootKeys = new List<Keys> { Keys.Up, Keys.Down, Keys.Right, Keys.Left };
         private static readonly List<Keys> MoveKeys = new List<Keys> { Keys.A, Keys.W, Keys.S, Keys.D };
 
@@ -30,13 +31,13 @@ namespace TopToDown_Shooter
             UpdateStyles();
             Paint += new PaintEventHandler(OnPaint);
             var stringMap = new[]{
-                 "                 # ",
-                 " P                #",
-                 "##                #",
-                 " M#           #    ",
-                 "  #           # M  ",
-                 "              #    ",
-                 "              #    "
+                 "                   # ",
+                 " P      #           #",
+                 "##  #   ### ##      #",
+                 "  # #   #       # M  ",
+                 " M#             ##   ",
+                 "     #  #  ##   #    ",
+                 "     #  #       #    "
             };
             KeyDown += new KeyEventHandler(DoTurn);
             Level = new Map(stringMap);
@@ -46,6 +47,8 @@ namespace TopToDown_Shooter
             MaximizeBox = false;
             MinimizeBox = false;
             Height = Level.Tiles.GetLength(1) * 64;
+            isGameOver = false;
+            Score = 0;
         }
 
         private void DoTurn(object sender, KeyEventArgs e)
@@ -68,6 +71,7 @@ namespace TopToDown_Shooter
                         break;
                 }
                 if (CoolDown == 3)
+                {
                     switch (e.KeyCode)
                     {
                         case Keys.Up:
@@ -87,9 +91,9 @@ namespace TopToDown_Shooter
                             CoolDown = 0;
                             break;
                     }
+                }
                 if (CoolDown != 3)
                     CoolDown++;
-
                 var i = Enemies.Count - 1;
                 while (Enemies.Count > 0 && i >= 0)
                     Enemies[i--].Move(Player, Level);
@@ -99,9 +103,19 @@ namespace TopToDown_Shooter
                     SpawnTime = 4;
                 }
                 else SpawnTime--;
-
                 Invalidate();
             }
+            if (isGameOver && Score > HighScore)
+                HighScore = Score;
+            if (isGameOver && e.KeyCode == Keys.R)
+            {
+                Hide();
+                Enemies.Clear();
+                var a = new Window() { HighScore = HighScore };
+                a.ShowDialog();
+            }
+            if (e.KeyCode == Keys.Escape)
+                Application.Exit();
         }
 
         private void OnLoad(object sender, EventArgs e) => Invalidate();
@@ -113,15 +127,23 @@ namespace TopToDown_Shooter
                 tile.Paint(e);
             DrawLowerTab(e, Level);
             if (isGameOver)
-            {
-                e.Graphics.FillRectangle(new SolidBrush(Color.White),
-                                         new Rectangle(0, 0, 320, 64));
-                e.Graphics.DrawString("GameOver",
-                                      new Font(FontFamily.GenericMonospace, 48, FontStyle.Bold),
-                                      new SolidBrush(Color.Red),
-                                      -10,
-                                      0);
-            }
+                DrawEndScrean(e);
+        }
+
+        private void DrawEndScrean(PaintEventArgs e)
+        {
+            e.Graphics.FillRectangle(new SolidBrush(Color.White),
+                                                     new Rectangle(0, 0, 320, 128));
+            e.Graphics.DrawString("GameOver",
+                                  new Font(FontFamily.GenericMonospace, 48, FontStyle.Bold),
+                                  new SolidBrush(Color.Red),
+                                  -10,
+                                  0);
+            e.Graphics.DrawString($"Highest Score: {HighScore}",
+                                  new Font(FontFamily.GenericMonospace, 24, FontStyle.Bold),
+                                  new SolidBrush(Color.Black),
+                                  0,
+                                  64);
         }
 
         private static void DrawLowerTab(PaintEventArgs e, Map level)
